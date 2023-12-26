@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Sudoku Solution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .image-container {
+            max-width: 100%;
+            max-height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Wrap items if not enough space */
+            gap: 150px;
+            /* Spacing between items */
+            margin-bottom: 40px;
+        }
+
+
+        .image-box img {
+            max-width: 100%;
+            max-height: auto;
+            /* Adjust based on your preference */
+            width: auto;
+            object-fit: cover;
+            border: 2px solid #ddd;
+        }
+
+        .sudoku-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            max-width: auto;
+            margin: 20px auto;
+            /* Thick border around the entire grid */
+        }
+
+        .sudoku-cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            height: 55px;
+            width: 55px;
+            font-size: 25px;
+            font-weight: bold;
+            border: 1px solid #000000;
+        }
+
+        /* Vertical Lines */
+
+        /* 3rd  and 6th cell in every row */
+        /* Vertical lines after the 3rd and 6th columns */
+        .sudoku-cell:nth-child(9n - 3),
+        .sudoku-cell:nth-child(9n-6) {
+            /* 9th cell in each row */
+            border-right: 4px solid #f50202;
+        }
+
+        /* Horizontal Lines */
+        .sudoku-grid div:nth-child(n+19):nth-child(-n+27),
+        /* Cells from 19th to 27th (end of 3rd row) */
+        .sudoku-grid div:nth-child(n+46):nth-child(-n+54) {
+            /* Cells from 46th to 54th (end of 6th row) */
+            border-bottom: 4px solid #f50202;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sudoku Puzzle Solution</h1>
+
+    <div class="image-container">
+        <div class="image-box">
+            <h2 class="title">Original Image</h2>
+            <img src="{{ url_for('static', filename='images/' + filename) }}" alt="Original Sudoku Image">
+        </div>
+        <div class="image-box">
+            <h2 class="title">Sudoku from Image</h2> <!-- Title for sudoku-grid-display -->
+            <div class="sudoku-grid">
+                <!-- Sudoku numbers inserted here -->
+                {% for row in sudoku_puzzle %}
+                {% for num in row %}
+                <div class="sudoku-cell">{{ num }}</div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% if solved %}
+    <div class="sudoku-grid">
+        {% for row in 'ABCDEFGHI' %}
+        {% for col in '123456789' %}
+        <div class="sudoku-cell">{{ puzzle[row + col] }}</div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>The Sudoku puzzle could not be solved with this program.</p>
+    {% endif %}
+</body>
+
+</html>
